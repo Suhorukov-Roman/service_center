@@ -5,9 +5,10 @@ import {
 	NavbarBrand,
 	NavbarContent,
 	NavbarItem,
-	Link,
+	// Link,
 	Button,
 } from '@heroui/react'
+import Link from 'next/link'
 import Image from 'next/image';
 
 export const AcmeLogo = () => {
