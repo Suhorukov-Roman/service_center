@@ -15,6 +15,8 @@ import {
 	Textarea,
 	Form,
 } from '@heroui/react'
+import { createRequest } from '@/actions/requestUser'
+import { IFormData } from '@/types/form-data_Request'
 
 export default function ModalApp() {
 	// Хук для управления состоянием модального окна (открыто/закрыто)
@@ -34,15 +36,42 @@ export default function ModalApp() {
 	]
 
 	// Функция обработки отправки формы
-	const handleSubmit = (
+	const handleSubmit = async (
 		e: React.FormEvent<HTMLFormElement>,
 		onClose: () => void
 	) => {
-		e.preventDefault() // Отменяем стандартное поведение формы
-		const data = Object.fromEntries(new FormData(e.currentTarget)) // Получаем данные формы
-		setAction(`submit ${JSON.stringify(data)}`) // Сохраняем данные в состоянии для отображения
-		console.log('Form data:', data) // Выводим данные в консоль
-		onClose() // Закрываем модальное окно после отправки
+		e.preventDefault() // Предотвращаем стандартное поведение браузера при отправке формы (перезагрузку) // Получаем данные формы с помощью нативного объекта FormData
+
+		const formDataNative = new FormData(e.currentTarget) // Конвертируем FormData в простой объект для удобной обработки
+		const data = Object.fromEntries(formDataNative) as any // Создаем объект заявки, сопоставляя ключи формы с полями интерфейса IFormData
+
+		const requestData: IFormData = {
+			// Заполняем поля объекта заявки
+			first_last_Name: data.fio as string,
+			phone: data.phone as string,
+			device: data.device as string,
+			address: data.address as string,
+			description: data.details as string,
+			status: 'PENDING',
+		}
+		console.log('Отправка заявки через Server Action:', requestData)
+
+		try {
+			// Вызываем Server Action для сохранения заявки в базе данных
+			const result = await createRequest(requestData)
+
+			if (result) {
+				alert('Заявка успешно создана!')
+			} else {
+				alert('Ошибка при создании заявки. Проверьте консоль сервера.')
+			}
+		} catch (error) {
+			console.error('Критическая ошибка при вызове Server Action:', error)
+			alert('Критическая ошибка при вызове Server Action.')
+		} 
+		
+		// Закрываем модальное окно после успешной (или неуспешной) попытки отправки
+		onClose()
 	}
 
 	return (

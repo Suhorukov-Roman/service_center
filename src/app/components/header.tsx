@@ -9,6 +9,7 @@ import {
 } from '@heroui/react';
 import Image from 'next/image';
 import ModalApp from './ModalApp';
+import ModalRegister from './ModalRegister';
 
 export const AcmeLogo = () => {
 	return (
@@ -53,6 +54,7 @@ export default function Header() {
 					)
 				})}
 				<ModalApp />
+				<ModalRegister />
 			</NavbarContent>
 		</Navbar>
 	)

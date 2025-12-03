@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+model Request {
+  id          String   @id @default(uuid())
+  first_last_Name   String   @map("first_last_Name")
+  phone       String
+  device      String
+  address     String
+  description String?  // подробнее (необязательно)
+  status      Status   @default(PENDING)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("requests")
+}
+
+enum Status {
+  PENDING     // новая
+  IN_PROGRESS // мастер принял
+  COMPLETED   // выполнена
+  CANCELLED   // отменена
+}

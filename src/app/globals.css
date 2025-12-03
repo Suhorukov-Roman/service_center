@@ -28,3 +28,7 @@ body {
   color: var(--foreground);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Arial, Helvetica, sans-serif;
 }
+
+header{
+  max-width: 1440px;
+}
